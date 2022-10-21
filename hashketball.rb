@@ -1,3 +1,4 @@
+require "pry"
 # Write your code below game_hash
 def game_hash
   {
@@ -14,7 +15,7 @@ def game_hash
           assists: 12,
           steals: 3,
           blocks: 1,
-          slam_dunks: 1
+          slam_dunks: 1,
         },
         {
           player_name: "Reggie Evans",
@@ -25,7 +26,7 @@ def game_hash
           assists: 12,
           steals: 12,
           blocks: 12,
-          slam_dunks: 7
+          slam_dunks: 7,
         },
         {
           player_name: "Brook Lopez",
@@ -36,7 +37,7 @@ def game_hash
           assists: 10,
           steals: 3,
           blocks: 1,
-          slam_dunks: 15
+          slam_dunks: 15,
         },
         {
           player_name: "Mason Plumlee",
@@ -47,7 +48,7 @@ def game_hash
           assists: 6,
           steals: 3,
           blocks: 8,
-          slam_dunks: 5
+          slam_dunks: 5,
         },
         {
           player_name: "Jason Terry",
@@ -58,9 +59,9 @@ def game_hash
           assists: 2,
           steals: 4,
           blocks: 11,
-          slam_dunks: 1
-        }
-      ]
+          slam_dunks: 1,
+        },
+      ],
     },
     away: {
       team_name: "Charlotte Hornets",
@@ -75,7 +76,7 @@ def game_hash
           assists: 1,
           steals: 2,
           blocks: 7,
-          slam_dunks: 2
+          slam_dunks: 2,
         },
         {
           player_name: "Bismack Biyombo",
@@ -86,7 +87,7 @@ def game_hash
           assists: 7,
           steals: 22,
           blocks: 15,
-          slam_dunks: 10
+          slam_dunks: 10,
         },
         {
           player_name: "DeSagna Diop",
@@ -97,7 +98,7 @@ def game_hash
           assists: 12,
           steals: 4,
           blocks: 5,
-          slam_dunks: 5
+          slam_dunks: 5,
         },
         {
           player_name: "Ben Gordon",
@@ -108,7 +109,7 @@ def game_hash
           assists: 2,
           steals: 1,
           blocks: 1,
-          slam_dunks: 0
+          slam_dunks: 0,
         },
         {
           player_name: "Kemba Walker",
@@ -119,11 +120,84 @@ def game_hash
           assists: 12,
           steals: 7,
           blocks: 5,
-          slam_dunks: 12
-        }
-      ]
-    }
+          slam_dunks: 12,
+        },
+      ],
+    },
   }
 end
 
 # Write code here
+def num_points_scored(player_name)
+  list_of_all_players.find { |player| player[:player_name] == player_name }[:points]
+end
+
+def shoe_size(player_name)
+  list_of_all_players.find { |player| player[:player_name] == player_name }[:shoe]
+end
+
+def team_colors(team_name)
+  teams = game_hash.clone
+  teams.find do |key, value|
+    value[:team_name] == team_name
+  end[1][:colors]
+end
+
+def team_names
+  teams = game_hash.clone
+  teams.map do |key, value|
+    value[:team_name]
+  end
+end
+
+def player_numbers(team_name)
+  game_hash.find do |key, value|
+    value[:team_name] == team_name
+  end[1]
+    .find { |key, value| if key == :players then value end }[1]
+    .map { |player| player[:number] }
+end
+
+def player_stats(player_name)
+  list_of_all_players.find do |player| player[:player_name] == player_name end
+end
+
+def big_shoe_rebounds
+  largest_shoe_size = list_of_all_players.map { |player| player[:shoe] }.max
+  list_of_all_players.find { |player| player[:shoe] == largest_shoe_size }[:rebounds]
+end
+
+def most_points_scored
+  most_points_scored = list_of_all_players.map { |player| player[:points] }.max
+  list_of_all_players.find { |player| player[:points] == most_points_scored }
+end
+
+def winning_team
+  home_team_points = game_hash.find do |key, value|
+    key == :home
+  end[1][:players].map { |player| player[:points] }.sum
+
+  away_team_points = game_hash.find do |key, value|
+    key == :away
+  end[1][:players].map { |player| player[:points] }.sum
+
+  if home_team_points > away_team_points
+    game_hash[:home][:team_name]
+  else
+    game_hash[:away][:team_name]
+  end
+end
+
+
+
+def list_of_all_players
+  game_players = Array.new
+  game_players = game_hash[:home][:players]
+  game_players.concat(game_hash[:away][:players])
+end
+
+# def team_keys
+#   teams = game_hash.clone
+#   teams.keys
+
+binding.pry
